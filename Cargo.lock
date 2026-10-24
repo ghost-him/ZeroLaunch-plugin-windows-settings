@@ -3322,19 +3322,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e13c156562582aa81c60cb29407084cdb54c4164760106ab78e6c5b0858cf64e"
 
 [[package]]
-name = "zerolaunch-hello-world-plugin"
-version = "0.2.1"
-dependencies = [
- "async-trait",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "zerolaunch-plugin-api",
- "zerolaunch-plugin-sdk-rust",
-]
-
-[[package]]
 name = "zerolaunch-plugin-api"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3396,6 +3383,19 @@ dependencies = [
  "tracing-subscriber",
  "zerolaunch-plugin-api",
  "zerolaunch-plugin-protocol",
+]
+
+[[package]]
+name = "zerolaunch-plugin-windows-settings"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "zerolaunch-plugin-api",
+ "zerolaunch-plugin-sdk-rust",
 ]
 
 [[package]]

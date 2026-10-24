@@ -1,24 +1,30 @@
-# ZeroLaunch 第三方插件模板
+# ZeroLaunch Windows 系统设置插件
 
-ZeroLaunch 第三方插件的最小骨架：一个 Rust 子进程，通过 stdio JSON-RPC 与宿主通信。覆盖开发、调试、打包、安装全流程——把本仓库改成自己的插件即可。
+ZeroLaunch 第三方插件：把常用 Windows 设置页（Wi-Fi、蓝牙、显示、更新、隐私等）作为数据源候选项加入搜索，选中后经 cmd 执行 `start ms-settings:...`（或经典控制面板程序）打开对应页面。设置页可逐项勾选启用项，取消勾选的设置不会进入候选缓存，从而降低无关候选与匹配噪声。
 
 插件只依赖 `zerolaunch-plugin-api`（trait/类型）与 `zerolaunch-plugin-sdk-rust`（`run()`、`host()`），不依赖 Tauri 与宿主源码。
+
+## 功能
+
+- **数据源组件**：`WindowsSettingsSource` 实现 `DataSource`，候选项直接进入宿主候选缓存，参与默认搜索排序。
+- **逐项开关**：设置 → 搜索管道 → 数据源 → Windows 设置数据源，勾选需要参与搜索的设置项（默认全选 64 项）；应用后立即刷新候选缓存。
+- **cmd 执行**：每个候选项的目标是 `ExecutionTarget::Command("start ...")`，由宿主命令执行器以 `cmd /D /S /C` 打开。
+- **中英双语**：候选项名称与设置项标签共用 `i18n/` 语言包；关键字同时包含中英文别名。
 
 ## 目录结构
 
 ```
 ├── Cargo.toml          # 依赖 zerolaunch-plugin-sdk-rust / plugin-api
-├── manifest.toml       # 插件清单（[plugin] 元数据、运行时命令、面板入口、图标），打包时位于 zip 根
+├── manifest.toml       # 插件清单（[plugin] 元数据、运行时命令、data_source 能力、图标），打包时位于 zip 根
 ├── package.py          # 打包脚本（cargo build --release + 生成安装 zip）
 ├── src/main.rs         # 启动骨架：init() + plugin::app().run()（随模板同步，尽量别改）
-├── src/plugin.rs       # 插件实现（你自己的代码，不参与同步）
+├── src/plugin.rs       # 插件实现：主组件 + WindowsSettingsSource(DataSource) + 内置设置项表
 ├── icon.svg            # 插件图标（清单 [icon] 声明，随包分发）
-├── ui/                 # 自定义面板资源（可选）
-├── i18n/               # 语言包（可选）：宿主加载时并入翻译目录，t_key() 自动带插件 id 前缀
+├── i18n/               # 语言包：候选项名称与设置项标签（宿主加载时并入翻译目录）
 └── .github/workflows/  # CI（check/build/打包）、推 tag 自动发 Release、模板同步入口
 ```
 
-`src/main.rs` 只做启动（`init()` 预置插件 id → `plugin::app().run()`），十来行、随模板同步；插件实现与装配都在 `src/plugin.rs`——照常实现 SDK 的 `Plugin` / `Configurable` trait，并导出 `pub fn app() -> PluginApp`。
+`src/main.rs` 只做启动（`init()` 预置插件 id → `plugin::app().run()`），十来行、随模板同步；插件实现与装配都在 `src/plugin.rs`——主组件实现 `Plugin` / `Configurable`，设置数据源实现 `DataSource` / `Configurable`，并在 `pub fn app() -> PluginApp` 里用 `with_data_source(...)` 挂载。
 
 ## 快速开始
 

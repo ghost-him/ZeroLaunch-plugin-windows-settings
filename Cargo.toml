@@ -1,8 +1,8 @@
 [package]
-name = "zerolaunch-hello-world-plugin"
-version = "0.2.1"
+name = "zerolaunch-plugin-windows-settings"
+version = "0.1.0"
 edition = "2021"
-description = "Hello-world example for ZeroLaunch third-party plugins."
+description = "Windows system settings data source for ZeroLaunch."
 license = "Apache-2.0"
 
 [dependencies]
