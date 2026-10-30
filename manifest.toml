@@ -1,7 +1,7 @@
 [plugin]
 id = "com.ghost-him.windows-settings"
 name = "Windows 系统设置"
-version = "0.1.0"
+version = "0.1.1"
 description = "把常用 Windows 设置页（Wi-Fi、蓝牙、显示、更新等）加入搜索，执行时经 cmd 打开对应设置页；可在设置中逐项勾选启用项"
 author = "ghost-him"
 # 不参与触发词路由：候选项由 data_source 组件直接进入搜索管道

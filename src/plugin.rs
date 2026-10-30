@@ -523,6 +523,7 @@ impl Configurable for WindowsSettingsSource {
                 widget: Some(WidgetHint::MultiSelect),
                 action: None,
                 detail_action: None,
+                drop: None,
             },
         }]
     }
